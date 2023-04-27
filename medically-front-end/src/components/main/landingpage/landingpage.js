@@ -1,8 +1,11 @@
 import { Title, Text, Container, Button, Overlay, createStyles, rem } from '@mantine/core';
 import useStyles from './landingstyle';
+import { useNavigate } from 'react-router-dom';
+
 
 const Landingpage = () => {
-    const { classes, cx } = useStyles(); 
+    const { classes, cx } = useStyles();
+    const navigate = useNavigate();
 
   return (
     <div className={classes.wrapper}>
@@ -23,11 +26,11 @@ const Landingpage = () => {
         </Container>
 
         <div className={classes.controls}>
-          <Button className={classes.control} variant="white" size="lg">
+          <Button className={classes.control} variant="white" size="lg" onClick={() => navigate('/signup')}>
             Get started
           </Button>
           <Button className={cx(classes.control, classes.secondaryControl)} size="lg">
-            Explore now
+            Request To Appointment
           </Button>
         </div>
       </div>
