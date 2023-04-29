@@ -1,11 +1,21 @@
 import { Paper, Text, Title, Button} from '@mantine/core';
 import { useStyles } from './style';
+import { useContext } from "react";
+import { UserContext } from '../../../context/userContext';
+import FormModal from './modal/formModal';
 
 const Doctorcard = () => {
   const { classes } = useStyles();
+  const {opened, open, close , setUsertype } = useContext(UserContext);
+
+  // handle Doctor modal
+  const handleModal = () => {
+    open();
+    setUsertype("Doctor")
+  }
     
   return(
-    <Paper
+    <><Paper
       shadow="md"
       p="xl"
       radius="md"
@@ -17,10 +27,11 @@ const Doctorcard = () => {
           As Doctor
         </Title>
       </div>
-      <Button variant="white" color="dark">
+      <Button variant="white" color="dark" onClick={handleModal}>
         Sign Up
       </Button>
     </Paper>
+    <FormModal /></>
   );
 }
 

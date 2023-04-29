@@ -18,11 +18,9 @@ import {
   ScrollArea,
   rem,
 } from "@mantine/core";
-import { MantineLogo } from "@mantine/ds";
 import { useDisclosure } from "@mantine/hooks";
 import { useStyles, mockdata } from "./headerstyle";
 import { useNavigate } from "react-router-dom";
-
 
 export function Headbar() {
   const navigate = useNavigate();
