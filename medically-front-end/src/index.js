@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { NavigationProgress } from "@mantine/nprogress";
 import { UserProvider } from "./context/userContext";
+import { Notifications } from '@mantine/notifications';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -14,6 +15,7 @@ root.render(
     <BrowserRouter>
       <MantineProvider withGlobalStyles withNormalizeCSS>
         <NavigationProgress />
+        <Notifications position="top-right" zIndex={2077} />
         <UserProvider>
           <App />
         </UserProvider>
