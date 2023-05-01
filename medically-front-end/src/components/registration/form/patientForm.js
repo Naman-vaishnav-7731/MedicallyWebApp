@@ -12,6 +12,7 @@ import {
   ActionIcon,
   Divider,
   Radio,
+  Textarea,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
@@ -23,10 +24,13 @@ const PatientForm = () => {
       lastname: "",
       phone_number: "",
       gender: "",
-      Dob:"",
+      Dob: "",
       email: "",
       password: "",
       confirm_password: "",
+      city: "",
+      zipcode: "",
+      address: "",
     },
 
     validate: (values) => ({
@@ -55,6 +59,15 @@ const PatientForm = () => {
           ? "Confirm Password is required"
           : values.confirm_password !== values.password
           ? "Password and Confirm password don't match"
+          : null,
+      city: values.city == "" ? "city is required" : null,
+      zipcode:
+        values.zipcode == ""
+          ? "Zipcode number is required"
+          : /[1-4]/g.test(values.zipcode) !== true
+          ? "Invalid Zipcode"
+          : values.zipcode.length < 6
+          ? "Zipcode must be 6 Digit only"
           : null,
     }),
   });
@@ -132,6 +145,37 @@ const PatientForm = () => {
           mt="md"
           withAsterisk
           {...form.getInputProps("confirm_password")}
+        />
+        <Divider style={{ marginTop: "20px" }} size={1} />
+        <TextInput
+          label="City"
+          placeholder="City"
+          type="text"
+          mt="md"
+          name="city"
+          withAsterisk
+          {...form.getInputProps("city")}
+        />
+        <TextInput
+          label="Zipcode"
+          placeholder="Zip code"
+          type="text"
+          mt="md"
+          withAsterisk
+          name="zipcode"
+          maxLength={6}
+          {...form.getInputProps("zipcode")}
+        />
+        <Textarea
+          label="Address"
+          placeholder="Address"
+          type="textarea"
+          name="address"
+          mt="md"
+          withAsterisk
+          onChange={(e) => {
+            form.getInputProps("address").onChange(e);
+          }}
         />
 
         <Button fullWidth mt="xl" type="submit">

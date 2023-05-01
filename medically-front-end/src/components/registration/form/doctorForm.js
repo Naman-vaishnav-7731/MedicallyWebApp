@@ -35,6 +35,8 @@ const DoctorForm = () => {
       address: "",
     },
 
+    //ToDO: Implementation of Validation of address
+
     validate: (values) => ({
       firstname: values.firstname == "" ? "First name is required" : null,
       lastname: values.lastname == "" ? "Last name is required" : null,
