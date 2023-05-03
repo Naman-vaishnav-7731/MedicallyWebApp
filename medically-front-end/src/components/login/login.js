@@ -17,11 +17,12 @@ import {
   import GoogleButton from 'react-google-button';
   import { useState , useMemo } from 'react';
   import { useGoogleLogin } from '@react-oauth/google';
-  import axios from 'axios';
   import { nprogress, NavigationProgress } from '@mantine/nprogress';
+  import { fetchUserprofile } from '../../utils/helpers/helper';
 
 
 const Login = () => {
+  
   // Set user Information for signup with login
   const [ user, setUser ] = useState([]);
   const navigate = useNavigate();
@@ -35,28 +36,14 @@ const handleLogin = () => {
   login();
 }
 
-// fetch use Profile
-const fetchUserprofile = async () => {
-  try {
-    const response = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-        headers: {
-            Authorization: `Bearer ${user.access_token}`,
-            Accept: 'application/json'
-        }
-    })
-    console.log(response);
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-useMemo(() => {
-    fetchUserprofile();
+useMemo(async () => {
+    const userDetails = await fetchUserprofile(user.access_token);
+    console.log(userDetails);
 } , [user]);
 
 return(
         <>
-        <Button variant="outline" radius="md" style={{position:'absolute', left:'30px' , top:'40px'}} onClick={() => navigate('/')}>
+        <Button variant="outline" radius="md" style={{position:'absolute', left:'30px' , top:'40px'}} onClick={() => navigate('/' , { replace: true })}>
            <FiArrowLeft size={25} />
         </Button>
         <Container size={420} my={90}>

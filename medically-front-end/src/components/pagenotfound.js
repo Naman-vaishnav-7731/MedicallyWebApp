@@ -51,7 +51,7 @@ const Pagenotfound = () => {
           been moved to another URL.
         </Text>
         <Group position="center">
-          <Button variant="subtle" size="md" onClick={() => {navigate('/')}}>
+          <Button variant="subtle" size="md" onClick={() => {navigate('/' , { replace: true })}}>
             Take me back to home page
           </Button>
         </Group>

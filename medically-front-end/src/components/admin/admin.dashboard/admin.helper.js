@@ -3,15 +3,14 @@ import {
   IconCalendarStats,
   IconGauge,
   IconPresentationAnalytics,
-  IconFileAnalytics,
-  IconAdjustments,
-  IconLock,
+  IconHomeMove
 } from "@tabler/icons-react";
 
 export const mockdata = [
-  { label: "Dashboard", icon: IconGauge },
+  { label: "Home", icon: IconHomeMove , link:'/'},
+  { label: "My Dashboard", icon: IconGauge },
   {
-    label: "Doctor",
+    label: "Doctor",  
     icon: IconNotes,
     initiallyOpened: true,
     links: [
@@ -27,5 +26,4 @@ export const mockdata = [
       { label: "View Patient", link: "/" },
     ],
   },
-  { label: "Analytics", icon: IconPresentationAnalytics },
 ];

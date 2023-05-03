@@ -14,8 +14,10 @@ import {
   IconChevronLeft,
   IconChevronRight,
 } from "@tabler/icons-react";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
+ 
   control: {
     fontWeight: 500,
     display: "block",
@@ -63,8 +65,9 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function LinksGroup({ icon: Icon, label, initiallyOpened, links }) {
+export function LinksGroup({ icon: Icon, label, initiallyOpened, links , link }) {
   const { classes, theme } = useStyles();
+  const naigate = useNavigate();
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
   const ChevronIcon = theme.dir === "ltr" ? IconChevronRight : IconChevronLeft;
@@ -72,9 +75,8 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }) {
     <Text
       component="a"
       className={classes.link}
-      href={link.link}
       key={link.label}
-      onClick={(event) => event.preventDefault()}
+      onClick={() => naigate(link.link)}
     >
       {link.label}
     </Text>
@@ -91,7 +93,7 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }) {
             <ThemeIcon variant="light" size={30}>
               <Icon size="1.1rem" />
             </ThemeIcon>
-            <Box ml="md">{label}</Box>
+            <Box ml="md" onClick={() => naigate(link)}>{label}</Box>
           </Box>
           {hasLinks && (
             <ChevronIcon

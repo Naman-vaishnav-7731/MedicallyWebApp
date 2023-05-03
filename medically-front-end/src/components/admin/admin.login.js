@@ -16,12 +16,16 @@ import { FiArrowLeft } from "react-icons/fi";
 import { useForm } from "@mantine/form";
 import { postRequest } from "../../utils/helpers/helper";
 import { notifications } from "@mantine/notifications";
-import { nprogress, NavigationProgress } from "@mantine/nprogress";
+import { useContext } from "react";
+import { UserContext } from "../../context/userContext";
 
 const AdminLogin = () => {
   //TODO:Implementation of Remember me Functionility
 
   const navigate = useNavigate();
+  const { adminLogged, setadminLogged } = useContext(UserContext);
+
+  console.log("adminLogged", adminLogged);
 
   const form = useForm({
     initialValues: {
@@ -46,7 +50,6 @@ const AdminLogin = () => {
     try {
       const response = await postRequest("admin/login", values);
       if (response) {
-        nprogress.start();
         notifications.show({
           id: "success-message",
           withCloseButton: true,
@@ -55,7 +58,8 @@ const AdminLogin = () => {
           color: "green",
           loading: false,
         });
-        nprogress.complete();
+
+        setadminLogged(true);
 
         const adminData = {
           email: response?.data?.email,
@@ -65,9 +69,10 @@ const AdminLogin = () => {
         // Store JWT Token and admin Details in Localstorage
         localStorage.setItem("Token", JSON.stringify(response?.data?.Token));
         localStorage.setItem("adminData", JSON.stringify(adminData));
+        localStorage.setItem("Role", JSON.stringify(response?.data?.Role));
 
         // Navigate to Admin Dashboard
-        navigate('/dashboard')
+        navigate("/dashboard", { replace: true });
       }
     } catch (error) {
       notifications.show({
@@ -87,7 +92,7 @@ const AdminLogin = () => {
         variant="outline"
         radius="md"
         style={{ position: "absolute", left: "30px", top: "40px" }}
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/", { replace: true })}
       >
         <FiArrowLeft size={25} />
       </Button>
@@ -101,7 +106,6 @@ const AdminLogin = () => {
         >
           Welcome back ! Admin🧑‍💻
         </Title>
-        <NavigationProgress />
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
           <form onSubmit={form.onSubmit(handleSubmit)}>
             <TextInput

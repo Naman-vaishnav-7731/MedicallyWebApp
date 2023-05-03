@@ -18,9 +18,38 @@ import axios from "axios";
 import GoogleButton from "react-google-button";
 import Doctorcard from "./cards/doctorcard";
 import Patientcard from "./cards/patientcard";
+import { useState } from "react";
+import { fetchUserprofile } from "../../utils/helpers/helper";
+import { useMemo } from "react";
+import { useContext } from "react";
+import { UserContext } from "../../context/userContext";
 
 const Registration = () => {
   const navigate = useNavigate();
+  const { userDetails, setuserDetails } = useContext(UserContext);
+
+  // Set user Information for signup with login
+  const [user, setUser] = useState([]);
+
+  const signup = useGoogleLogin({
+    onSuccess: (codeResponse) => setUser(codeResponse),
+    onError: (error) => console.log("Login Failed:", error),
+  });
+
+  const handleSignup = () => {
+    signup();
+  };
+
+  // implement useMemo for Encahnce the Perfomance
+  useMemo(async () => {
+    // setuserDetails(null);
+    const userData = await fetchUserprofile(user.access_token);
+    setuserDetails(userData);
+    if(userData?.status == 200){
+      navigate('/userrole' , {replace : true});
+    }
+  }, [user]);
+  
 
   return (
     <>
@@ -28,7 +57,7 @@ const Registration = () => {
         variant="outline"
         radius="md"
         style={{ position: "absolute", left: "30px", top: "40px" }}
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/" , { replace: true })}
       >
         <FiArrowLeft size={25} />
       </Button>
@@ -47,7 +76,7 @@ const Registration = () => {
           <Anchor
             size="sm"
             component="button"
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/login" , { replace: true })}
           >
             Sign In Here
           </Anchor>
@@ -56,10 +85,8 @@ const Registration = () => {
         <Paper withBorder shadow="md" p={30} mt={20} radius="md">
           <GoogleButton
             label="Sign Up With Google"
-            onClick={() => {
-              console.log("Google button clicked");
-            }}
-            style={{ width: "100%" }}   
+            onClick={handleSignup}
+            style={{ width: "100%" }}
           />
           <Divider
             size="sm"

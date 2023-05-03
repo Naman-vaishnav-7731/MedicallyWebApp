@@ -8,7 +8,7 @@ import {
     IconChevronDown,
   } from '@tabler/icons-react';
 
-  import { createStyles ,  rem } from '@mantine/core';
+  import { createStyles ,  rem  } from '@mantine/core';
 
 export const useStyles = createStyles((theme) => ({
     link: {
@@ -63,6 +63,7 @@ export const useStyles = createStyles((theme) => ({
       [theme.fn.smallerThan('sm')]: {
         display: 'none',
       },
+
     },
   
     hiddenDesktop: {

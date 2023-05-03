@@ -26,7 +26,7 @@ const Landingpage = () => {
         </Container>
 
         <div className={classes.controls}>
-          <Button className={classes.control} variant="white" size="lg" onClick={() => navigate('/signup')}>
+          <Button className={classes.control} variant="white" size="lg" onClick={() => navigate('/signup' , { replace: true })}>
             Get started
           </Button>
           <Button className={cx(classes.control, classes.secondaryControl)} size="lg">

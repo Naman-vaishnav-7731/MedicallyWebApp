@@ -12,7 +12,6 @@ const genrateToken = require("../util/genrate.jwt.token");
 
 // @dec Admin Create | @Route admin/addadmin | @Access is Disable
 const addAdmin = asyncHandler(async (req, res) => {
-
   const { admin_name, admin_email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -35,7 +34,6 @@ const addAdmin = asyncHandler(async (req, res) => {
 // @Route admin/login
 // @Access Only admin
 const adminLogin = asyncHandler(async (req, res) => {
-
   // Validate login fileds
   const { errors, isValid } = validatelogin(req.body);
   if (!isValid) {
@@ -67,6 +65,7 @@ const adminLogin = asyncHandler(async (req, res) => {
         email: adminData.admin_email,
         name: adminData.admin_name,
         Token: Token,
+        Role: "Admin",
       });
     } else {
       res.status(400).json({ message: "Email and password is not match" });

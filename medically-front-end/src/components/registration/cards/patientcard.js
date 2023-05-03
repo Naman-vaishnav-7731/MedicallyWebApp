@@ -13,6 +13,7 @@ const Patientcard = () => {
     open();
     setUsertype("Patient");
   };
+  
   return (
     <>
       <Paper
