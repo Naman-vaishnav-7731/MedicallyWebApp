@@ -15,8 +15,16 @@ import {
   Textarea,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useState } from "react";
+import { notifications } from "@mantine/notifications";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const DoctorForm = () => {
+  //TODO:Fix The Problem Named Page refresh at the time of Profile Upload and Submit
+
+  const navigate = useNavigate();
+
   //Intial values
   const form = useForm({
     initialValues: {
@@ -33,10 +41,11 @@ const DoctorForm = () => {
       city: "",
       zipcode: "",
       address: "",
+      userType: "Doctor",
+      Image: null,
     },
 
     //ToDO: Implementation of Validation of address
-
     validate: (values) => ({
       firstname: values.firstname == "" ? "First name is required" : null,
       lastname: values.lastname == "" ? "Last name is required" : null,
@@ -80,8 +89,59 @@ const DoctorForm = () => {
     }),
   });
 
-  const handleSubmit = (values) => {
+  // Handle Submit Form
+  const handleSubmit = async (values) => {
     console.log(values);
+
+    const formData = new FormData();
+    formData.append("firstname", values.firstname);
+    formData.append("lastname", values.lastname);
+    formData.append("phone_number", values.phone_number);
+    formData.append("gender", values.gender);
+    formData.append("Dob", values.Dob);
+    formData.append("email", values.email);
+    formData.append("password", values.password);
+    formData.append("qualification", values.qualification);
+    formData.append("specialization", values.specialization);
+    formData.append("city", values.city);
+    formData.append("zipcode", values.zipcode);
+    formData.append("address", values.address);
+    formData.append("Image", values.Image);
+    formData.append("userType", values.userType);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3002/user/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (response) {
+        notifications.show({
+          id: "success-message",
+          withCloseButton: true,
+          autoClose: 3000,
+          message: `Sucessfully Login`,
+          color: "green",
+          loading: false,
+        });
+        form.reset();
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log(error);
+      notifications.show({
+        id: "error-message",
+        withCloseButton: true,
+        autoClose: 3000,
+        message: `${error.response.data.message}`,
+        color: "red",
+        loading: false,
+      });
+    }
   };
 
   return (
@@ -189,6 +249,7 @@ const DoctorForm = () => {
           withAsterisk
           {...form.getInputProps("city")}
         />
+
         <TextInput
           label="Zipcode"
           placeholder="Zip code"
@@ -199,6 +260,7 @@ const DoctorForm = () => {
           maxLength={6}
           {...form.getInputProps("zipcode")}
         />
+
         <Textarea
           label="Address"
           placeholder="Address"
@@ -211,6 +273,20 @@ const DoctorForm = () => {
           }}
         />
 
+        <TextInput
+          label="Profile Picture"
+          placeholder="Profile Picture"
+          type="file"
+          mt="md"
+          name="Image"
+          withAsterisk
+          onChange={(e) => {
+            form.getInputProps("Image").onChange(e?.currentTarget?.files[0]);
+          }}
+          accept="image/png,image/jpeg"
+        />
+
+        <Divider style={{ marginTop: "20px" }} size={1} />
         <Button fullWidth mt="xl" type="submit">
           Sign in
         </Button>

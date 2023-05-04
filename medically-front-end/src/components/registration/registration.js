@@ -14,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import { GoogleLogin } from "@react-oauth/google";
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 import GoogleButton from "react-google-button";
 import Doctorcard from "./cards/doctorcard";
 import Patientcard from "./cards/patientcard";
@@ -23,12 +22,13 @@ import { fetchUserprofile } from "../../utils/helpers/helper";
 import { useMemo } from "react";
 import { useContext } from "react";
 import { UserContext } from "../../context/userContext";
+import { getRequest } from "../../utils/helpers/helper";
+import { notifications } from "@mantine/notifications";
 
 const Registration = () => {
   const navigate = useNavigate();
   const { userDetails, setuserDetails } = useContext(UserContext);
 
-  // Set user Information for signup with login
   const [user, setUser] = useState([]);
 
   const signup = useGoogleLogin({
@@ -36,20 +36,36 @@ const Registration = () => {
     onError: (error) => console.log("Login Failed:", error),
   });
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
+    setUser([]);
     signup();
+  };
+
+  const handleUser = async () => {
+    const userData = await fetchUserprofile(user.access_token);
+    if (userData?.status == 200) {
+      setuserDetails(userData);
+      const response = await getRequest("user/" + userData?.data?.email);
+      console.log(response);
+      if (!(response?.status == 200)) {
+        navigate("/", { replace: true });
+      } else {
+        notifications.show({
+          id: "error-message",
+          withCloseButton: true,
+          autoClose: 3000,
+          message: `${response?.data?.email} is already Exits`,
+          color: "red",
+          loading: false,
+        });
+      }
+    }
   };
 
   // implement useMemo for Encahnce the Perfomance
   useMemo(async () => {
-    // setuserDetails(null);
-    const userData = await fetchUserprofile(user.access_token);
-    setuserDetails(userData);
-    if(userData?.status == 200){
-      navigate('/userrole' , {replace : true});
-    }
+    handleUser();
   }, [user]);
-  
 
   return (
     <>
@@ -57,7 +73,7 @@ const Registration = () => {
         variant="outline"
         radius="md"
         style={{ position: "absolute", left: "30px", top: "40px" }}
-        onClick={() => navigate("/" , { replace: true })}
+        onClick={() => navigate("/", { replace: true })}
       >
         <FiArrowLeft size={25} />
       </Button>
@@ -76,7 +92,7 @@ const Registration = () => {
           <Anchor
             size="sm"
             component="button"
-            onClick={() => navigate("/login" , { replace: true })}
+            onClick={() => navigate("/login", { replace: true })}
           >
             Sign In Here
           </Anchor>

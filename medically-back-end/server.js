@@ -4,6 +4,7 @@ const dotEnv = require("dotenv").config();
 const app = express();
 const cors = require("cors");
 require("./model/index");
+const ws = require("ws");
 
 const Port = process.env.PORT || 3001;
 
@@ -22,6 +23,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // @Route (/admin) is common route
 app.use("/admin", require("./routes/adminRoutes"));
 
-app.listen(Port, () => {
+// @Route (/user) is common route
+app.use("/user", require("./routes/userRoutes"));
+
+const server = app.listen(Port, () => {
   console.log(`Server is running on port ${Port}`);
 });
+
+const wss = new ws.WebSocketServer({ server });
+wss.on("connection", (connection) => {
+  console.log("connected");
+  connection.send("hello naman ")
+});
+
+

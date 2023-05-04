@@ -21,6 +21,7 @@ export const useStyles = createStyles((theme) => ({
       color: theme.colorScheme === 'dark' ? theme.white : theme.black,
       fontWeight: 500,
       fontSize: theme.fontSizes.sm,
+      cursor:'pointer',
   
       [theme.fn.smallerThan('sm')]: {
         height: rem(42),

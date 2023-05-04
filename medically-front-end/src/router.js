@@ -7,6 +7,8 @@ import Pagenotfound from "./components/pagenotfound";
 import AdminLogin from "./components/admin/admin.login";
 import AdminDashboard from "./components/admin/admin.dashboard/admin.dashboard";
 import UserRoleCard from "./components/google-signup/userrole.card";
+import OurDoctors from "./components/doctor/our.doctor";
+import Chat from "./components/chat/chat";
 
 const Routers = () => {
   return (
@@ -19,6 +21,8 @@ const Routers = () => {
       {/* Implement Nested Routing*/}
       <Route path="/" element={<Main />}>
         <Route index element={<Home />} />
+        <Route path="ourdoctors" element={<OurDoctors />} />
+        <Route path="chatroom" element={<Chat />} />
       </Route>
 
       {/* Implement admin Route */}

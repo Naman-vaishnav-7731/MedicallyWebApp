@@ -15,6 +15,7 @@ import {
   Textarea,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import axios from "axios";
 
 const PatientForm = () => {
   //  Patient form inital values
@@ -31,6 +32,8 @@ const PatientForm = () => {
       city: "",
       zipcode: "",
       address: "",
+      userType: "Patient",
+      Image: null,
     },
 
     validate: (values) => ({
@@ -73,8 +76,37 @@ const PatientForm = () => {
   });
 
   // Handle Submit
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     console.log(values);
+    const formData = new FormData();
+    formData.append("firstname", values.firstname);
+    formData.append("lastname", values.lastname);
+    formData.append("phone_number", values.phone_number);
+    formData.append("gender", values.gender);
+    formData.append("Dob", values.Dob);
+    formData.append("email", values.email);
+    formData.append("password", values.password);
+    formData.append("city", values.city);
+    formData.append("zipcode", values.zipcode);
+    formData.append("address", values.address);
+    formData.append("Image", values.Image);
+    formData.append("userType", values.userType);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3002/user/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      form.reset();
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -176,6 +208,19 @@ const PatientForm = () => {
           onChange={(e) => {
             form.getInputProps("address").onChange(e);
           }}
+        />
+
+        <TextInput
+          label="Profile Picture"
+          placeholder="Profile Picture"
+          type="file"
+          mt="md"
+          name="Image"
+          withAsterisk
+          onChange={(e) => {
+            form.getInputProps("Image").onChange(e?.currentTarget?.files[0]);
+          }}
+          accept="image/png,image/jpeg"
         />
 
         <Button fullWidth mt="xl" type="submit">

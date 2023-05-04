@@ -31,6 +31,9 @@ import {
   IconPhoto,
   IconLogout,
   IconDashboard,
+  IconBrandMessenger,
+  IconHome2,
+  IconStethoscope,
 } from "@tabler/icons-react";
 
 export function Headbar() {
@@ -63,7 +66,7 @@ export function Headbar() {
   const handleLogout = () => {
     localStorage.clear();
     setadminLogged(false);
-    navigate('/' , { replace: true })
+    navigate("/", { replace: true });
   };
 
   return (
@@ -76,8 +79,17 @@ export function Headbar() {
             spacing={0}
             className={classes.hiddenMobile}
           >
-            <a href="#" className={classes.link}>
+            <a className={classes.link} onClick={() => navigate("/")}>
+              <IconHome2 size={23} />
               Home
+            </a>
+            <a className={classes.link} onClick={() => navigate("ourdoctors")}>
+              <IconStethoscope size={23} />
+              Our Doctors
+            </a>
+            <a className={classes.link} onClick={() => navigate("chatroom")}>
+              <IconBrandMessenger size={23} />
+              Chat Room
             </a>
           </Group>
 
@@ -104,7 +116,10 @@ export function Headbar() {
                         Admin Dashboard
                       </Menu.Item>
                     ) : null}
-                    <Menu.Item icon={<IconLogout size={14} />} onClick={handleLogout}>
+                    <Menu.Item
+                      icon={<IconLogout size={14} />}
+                      onClick={handleLogout}
+                    >
                       Log out
                     </Menu.Item>
                   </Menu.Dropdown>
