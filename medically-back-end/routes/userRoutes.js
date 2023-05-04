@@ -1,7 +1,7 @@
 const express = require("express");
 const Router = express.Router();
 // Import the controller functions for the user routes
-const { addUser, getUsers, getUser, updateUser, deleteUser } = require('../controllers/userController');
+const { addUser, getUsers, getUser, updateUser, deleteUser  , loginUser } = require('../controllers/userController');
 const multer = require('multer');
 
 // Upload Users Profile
@@ -35,10 +35,7 @@ Router.route('/:email').put(updateUser);
 // @Route /updateUser | @DESC - Update User
 Router.route('/:email').delete(deleteUser);
 
-
 // @Route /login | @DESC - login User
-Router.route('/login').post(login);
-
-
+Router.route('/login').post(loginUser);
 
 module.exports = Router;

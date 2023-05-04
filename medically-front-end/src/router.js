@@ -9,6 +9,7 @@ import AdminDashboard from "./components/admin/admin.dashboard/admin.dashboard";
 import UserRoleCard from "./components/google-signup/userrole.card";
 import OurDoctors from "./components/doctor/our.doctor";
 import Chat from "./components/chat/chat";
+import Profile from "./components/user/profile";
 
 const Routers = () => {
   return (
@@ -23,6 +24,7 @@ const Routers = () => {
         <Route index element={<Home />} />
         <Route path="ourdoctors" element={<OurDoctors />} />
         <Route path="chatroom" element={<Chat />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
 
       {/* Implement admin Route */}

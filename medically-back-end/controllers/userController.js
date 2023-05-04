@@ -279,7 +279,6 @@ const getUsers = asyncHandler(async (req, res) => {
 // @route GET /getUser/:email
 // @access Priavte
 const getUser = asyncHandler(async (req, res) => {
-  
   const { email } = req.params;
   try {
     const userExits = await user.findOne({ where: { email } });
@@ -305,4 +304,79 @@ const updateUser = asyncHandler(async (req, res) => {
 // @access Private
 const deleteUser = asyncHandler(async (req, res) => {});
 
-module.exports = { addUser, getUsers, getUser, updateUser, deleteUser };
+// @desc login user
+// @route DELETE /loginUser
+// @access Public
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, signinType, password } = req.body;
+
+  if (signinType == "googleSignin") {
+    console.log('helo')
+    
+    try {
+      const userData = await user.findOne({
+        where: { email: email },
+      });
+
+      if (userData === null) {
+        return res.status(404).json({ message: `${email} is not exits` });
+      }
+
+      if (userData) {
+        const Token = genrateToken(userData.id);
+        res.status(200).json({
+          email: userData.email,
+          Image: userData.image,
+          Token: Token,
+          Role: userData.userType,
+        });
+      } else {
+        res.status(400).json({ message: "Invalid Email" });
+        throw new Error("Invalid Email");
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error });
+    }
+  } else {
+    try {
+      // find admin data
+      const userData = await user.findOne({
+        where: { email: email },
+      });
+
+      // If admin is not exits
+      if (userData === null) {
+        return res.status(404).json({ message: `${email} is not exits` });
+      }
+
+      // compare user password with hashpassword
+      if (userData && (await bcrypt.compare(password, userData.password))) {
+        // genrate token
+        const Token = genrateToken(userData.id);
+
+        res.status(200).json({
+          email: userData.email,
+          Image: userData.image,
+          Token: Token,
+          Role: userData.userType,
+        });
+      } else {
+        res.status(400).json({ message: "Email and password is not match" });
+        throw new Error("Email and password is not match");
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error });
+    }
+  }
+});
+
+module.exports = {
+  addUser,
+  getUsers,
+  getUser,
+  updateUser,
+  deleteUser,
+  loginUser,
+};
