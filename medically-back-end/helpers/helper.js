@@ -2,7 +2,7 @@
 
 const getPagination = (page, size) => {
   // limit qual size of one page
-  const limit = size ? +size : 5;
+  const limit = size ? +size : null;
   const offset = page ? page * limit : 0;
   return { limit, offset };
 };

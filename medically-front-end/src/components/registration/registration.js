@@ -42,22 +42,28 @@ const Registration = () => {
   };
 
   const handleUser = async () => {
-    const userData = await fetchUserprofile(user.access_token);
-    if (userData?.status == 200) {
-      setuserDetails(userData);
-      const response = await getRequest("user/" + userData?.data?.email);
-      console.log(response);
-      if (!(response?.status == 200)) {
-        navigate("/", { replace: true });
-      } else {
-        notifications.show({
-          id: "error-message",
-          withCloseButton: true,
-          autoClose: 3000,
-          message: `${response?.data?.email} is already Exits`,
-          color: "red",
-          loading: false,
-        });
+    try {
+      const userData = await fetchUserprofile(user.access_token);
+      if (userData?.status == 200) {
+        setuserDetails(userData);
+        const response = await getRequest("user/" + userData?.data?.email);
+        console.log(response);
+        if (!(response?.status == 200)) {
+          navigate("/", { replace: true });
+        } else {
+          notifications.show({
+            id: "error-message",
+            withCloseButton: true,
+            autoClose: 3000,
+            message: `${response?.data?.email} is already Exits`,
+            color: "red",
+            loading: false,
+          });
+        }
+      }
+    } catch (error) {
+      if (error) {
+        navigate("/userrole" , { replace: true });
       }
     }
   };

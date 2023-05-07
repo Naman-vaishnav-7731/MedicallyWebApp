@@ -228,6 +228,12 @@ const addUser = asyncHandler(async (req, res) => {
 // @access Private
 //TODO:Think about  more depth
 const getUsers = asyncHandler(async (req, res) => {
+  // if (!(req.userType == "Admin")) {
+  //   return res
+  //     .status(403)
+  //     .json({ message: "Access denied: only admins can access admin data" });
+  // }
+
   const { search, page, size } = req.query;
   // user search something
   const serachUser = search
@@ -246,10 +252,7 @@ const getUsers = asyncHandler(async (req, res) => {
             phone_number: { [Op.like]: `%${search}%` },
           },
           {
-            city: { [Op.like]: `%${search}%` },
-          },
-          {
-            pincode: { [Op.like]: `%${search}%` },
+            isApproved: { [Op.like]: `%${search}%` },
           },
         ],
       }
@@ -279,6 +282,13 @@ const getUsers = asyncHandler(async (req, res) => {
 // @route GET /getUser/:email
 // @access Priavte
 const getUser = asyncHandler(async (req, res) => {
+  // if (
+  //   !(req.userType == "Admin") ||
+  //   !(req.userType == "Doctor") ||
+  //   !(req.userType == "Patient")
+  // ) {
+  //   return res.status(403).json({ message: "Access denied: Unauthorized" });
+  // }
   const { email } = req.params;
   try {
     const userExits = await user.findOne({ where: { email } });
@@ -296,13 +306,25 @@ const getUser = asyncHandler(async (req, res) => {
 // @route PUT /updateUser/:email
 // @access Private
 const updateUser = asyncHandler(async (req, res) => {
-  // Logic to update a user in the database based on their email address
+  if (
+    !(req.userType == "Admin") ||
+    !(req.userType == "Doctor") ||
+    !(req.userType == "Patient")
+  ) {
+    return res.status(403).json({ message: "Access denied: Unauthorized" });
+  }
 });
 
 // @desc Delete user
 // @route DELETE /deleteUser/:email
 // @access Private
-const deleteUser = asyncHandler(async (req, res) => {});
+const deleteUser = asyncHandler(async (req, res) => {
+  if (!(req.userType == "Admin")) {
+    return res
+      .status(403)
+      .json({ message: "Access denied: only admins can access admin data" });
+  }
+});
 
 // @desc login user
 // @route DELETE /loginUser
@@ -311,8 +333,6 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, signinType, password } = req.body;
 
   if (signinType == "googleSignin") {
-    console.log('helo')
-    
     try {
       const userData = await user.findOne({
         where: { email: email },

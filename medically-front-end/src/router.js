@@ -9,7 +9,13 @@ import AdminDashboard from "./components/admin/admin.dashboard/admin.dashboard";
 import UserRoleCard from "./components/google-signup/userrole.card";
 import OurDoctors from "./components/doctor/our.doctor";
 import Chat from "./components/chat/chat";
-import Profile from "./components/user/profile";
+import Profile from "./components/user/profile/profile";
+import MyDashboard from "./components/admin/admin.menus/mydashboard";
+import ViewDoctors from "./components/admin/admin.menus/doctors/view.doctor";
+import AddDoctors from "./components/admin/admin.menus/doctors/add.doctor";
+import AddPatient from "./components/admin/admin.menus/patients/add.patient";
+import ApproveRequest from "./components/admin/admin.menus/doctors/approve.request";
+import ViewPatient from "./components/admin/admin.menus/patients/view.patient";
 
 const Routers = () => {
   return (
@@ -30,9 +36,13 @@ const Routers = () => {
       {/* Implement admin Route */}
       <Route path="/admin" element={<AdminLogin />} />
       <Route path="/dashboard" element={<AdminDashboard />}>
-
-      </Route>
-
+        <Route index element={<MyDashboard />} />
+        <Route path="viewdoctors" element={<ViewDoctors />} />
+        <Route path="adddoctors" element={<AddDoctors />} />
+        <Route path="addpatient" element={<AddPatient />} />
+        <Route path="approverequest" element={<ApproveRequest />} />
+        <Route path="viewpatient" element={<ViewPatient />} />
+      </Route> 
 
       <Route path="*" element={<Pagenotfound />} />
     </Routes>

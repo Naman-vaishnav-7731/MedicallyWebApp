@@ -12,7 +12,7 @@ const genrateToken = require("../util/genrate.jwt.token");
 
 // @dec Admin Create | @Route admin/addadmin | @Access is Disable
 const addAdmin = asyncHandler(async (req, res) => {
-  const { admin_name, admin_email, password } = req.body;
+  const { admin_name, admin_email, password , userType , id } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
@@ -20,6 +20,8 @@ const addAdmin = asyncHandler(async (req, res) => {
       admin_email,
       admin_name,
       password: hashedPassword,
+      userType,
+      id
     });
     if (addAdmin) {
       res.status(200).json({ message: "successfully admin is added" });

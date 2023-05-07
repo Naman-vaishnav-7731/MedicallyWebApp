@@ -10,9 +10,12 @@ import { useForm } from "@mantine/form";
 import axios from "axios";
 import { useContext } from "react";
 import { UserContext } from "../../../context/userContext";
+import { useNavigate } from "react-router-dom";
+import { notifications } from "@mantine/notifications";
 
 const PatientForm = () => {
-  const { userDetails} = useContext(UserContext);
+  const { userDetails } = useContext(UserContext);
+  const navigate = useNavigate();
 
   //  Patient form inital values
   const form = useForm({
@@ -82,10 +85,30 @@ const PatientForm = () => {
           },
         }
       );
-      form.reset();
-      console.log(response);
+      if (response) {
+        notifications.show({
+          id: "success-message",
+          withCloseButton: true,
+          autoClose: 3000,
+          message: `Sucessfully Login`,
+          color: "green",
+          loading: false,
+        });
+        form.reset();
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }
     } catch (error) {
       console.log(error);
+      notifications.show({
+        id: "error-message",
+        withCloseButton: true,
+        autoClose: 3000,
+        message: `${error.response.data.message}`,
+        color: "red",
+        loading: false,
+      });
     }
   };
 

@@ -9,6 +9,8 @@ export const UserProvider = ({ children }) => {
   const [isUsertype, setUsertype] = useState("");
   const [adminLogged, setadminLogged] = useState(false);
   const [userDetails, setuserDetails] = useState(null);
+  const [isLogged, setisLogged] = useState(null);
+  const [loggedUserdata, setloggedUserdata] = useState(null);
 
   return (
     <UserContext.Provider
@@ -22,6 +24,10 @@ export const UserProvider = ({ children }) => {
         setadminLogged,
         userDetails,
         setuserDetails,
+        isLogged,
+        setisLogged,
+        loggedUserdata,
+        setloggedUserdata,
       }}
     >
       {children}

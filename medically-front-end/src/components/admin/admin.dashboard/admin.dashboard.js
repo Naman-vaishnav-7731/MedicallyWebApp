@@ -9,6 +9,7 @@ import {
   Paper,
   Text,
   Menu,
+  Container,
 } from "@mantine/core";
 import { LinksGroup } from "../../navlink/navlink";
 import { mockdata } from "./admin.helper";
@@ -22,8 +23,9 @@ import {
   IconPhoto,
   IconLogout,
   IconDashboard,
-  
+  IconHeartbeat,
 } from "@tabler/icons-react";
+import { Outlet } from "react-router-dom";
 
 const AdminDashboard = () => {
   const { classes } = useStyles();
@@ -42,15 +44,23 @@ const AdminDashboard = () => {
     <>
       <Navbar
         height={600}
-        style={{ width: "250px", position: "fixed", top: "0" }}
+        style={{
+          width: isOpen ? "250px" : "60px",
+          position: "fixed",
+          top: "0",
+        }}
         p="md"
         className={classes.navbar}
       >
         <Navbar.Section className={classes.header}>
           <Group position="apart">
-            <h3 width={rem(120)}>Medically❤️</h3>
-            <Button variant="outline" onClick={handleSidenavbar}>
-              <BsList size={20} />
+            <Button
+              variant="outline"
+              onClick={handleSidenavbar}
+              size={!isOpen ? "xsm" : "sm"}
+              p={5}
+            >
+              {isOpen ? " Medically❤️" : <IconHeartbeat />}
             </Button>
           </Group>
         </Navbar.Section>
@@ -59,13 +69,9 @@ const AdminDashboard = () => {
           <div className={classes.linksInner}>{links}</div>
         </Navbar.Section>
       </Navbar>
-      <Paper p="md" style={{ width: "70%", margin: "auto" }} ma>
-        <Text>Paper is the most basic ui component</Text>
-        <Text>
-          Use it to create cards, dropdowns, modals and other components that
-          require background with shadow
-        </Text>
-      </Paper>
+      <Container size={700} mt={50}>
+        <Outlet />
+      </Container>
     </>
   );
 };

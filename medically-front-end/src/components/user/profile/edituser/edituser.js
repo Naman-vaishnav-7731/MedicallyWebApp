@@ -1,29 +1,30 @@
+import { useForm } from "@mantine/form";
 import {
   TextInput,
-  PasswordInput,
-  Checkbox,
-  Anchor,
-  Paper,
-  Title,
-  Text,
-  Container,
   Group,
   Button,
-  ActionIcon,
   Divider,
   Radio,
   Textarea,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../../../context/userContext";
 
-const DoctorForm = () => {
-  //TODO:Fix The Problem Named Page refresh at the time of Profile Upload and Submit
-
+const EditUser = () => {
   const navigate = useNavigate();
+  const [isDisabled, setisDisabled] = useState(true);
+  const { loggedUserdata} = useContext(UserContext);
+
+  useEffect(() => {}, [isDisabled]);
+
+  // Handle Disables
+  const handleDisable = () => {
+    setisDisabled(false);
+  };
 
   //Intial values
   const form = useForm({
@@ -42,7 +43,6 @@ const DoctorForm = () => {
       zipcode: "",
       address: "",
       userType: "Doctor",
-      Image: null,
     },
 
     //ToDO: Implementation of Validation of address
@@ -129,6 +129,7 @@ const DoctorForm = () => {
           loading: false,
         });
         form.reset();
+        navigate("/login");
       }
     } catch (error) {
       console.log(error);
@@ -142,7 +143,6 @@ const DoctorForm = () => {
       });
     }
   };
-
   return (
     <>
       <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -153,6 +153,7 @@ const DoctorForm = () => {
           name="firstname"
           withAsterisk
           {...form.getInputProps("firstname")}
+          disabled={isDisabled}
         />
         <TextInput
           label="Last Name"
@@ -162,6 +163,7 @@ const DoctorForm = () => {
           name="lastname"
           withAsterisk
           {...form.getInputProps("lastname")}
+          disabled={isDisabled}
         />
         <TextInput
           label="Phone number"
@@ -171,6 +173,7 @@ const DoctorForm = () => {
           name="phone_number"
           withAsterisk
           {...form.getInputProps("phone_number")}
+          disabled={isDisabled}
         />
         <Radio.Group
           name="gender"
@@ -178,11 +181,12 @@ const DoctorForm = () => {
           withAsterisk
           mt="md"
           {...form.getInputProps("gender")}
+          disabled={isDisabled}
         >
-          <Group mt="xs">
-            <Radio value="Male" name="gender" label="Male" checked={true} />
-            <Radio value="Female" name="gender" label="Female" />
-            <Radio value="Other" name="gender" label="Other" />
+          <Group mt="xs" >
+            <Radio value="Male" name="gender" label="Male" checked={true}  disabled={isDisabled} />
+            <Radio value="Female" name="gender" label="Female" disabled={isDisabled} />
+            <Radio value="Other" name="gender" label="Other" disabled={isDisabled} />
           </Group>
         </Radio.Group>
         <TextInput
@@ -193,6 +197,7 @@ const DoctorForm = () => {
           name="Dob"
           withAsterisk
           {...form.getInputProps("Dob")}
+          disabled={isDisabled}
         />
         <TextInput
           label="Email Id"
@@ -202,42 +207,34 @@ const DoctorForm = () => {
           name="email"
           withAsterisk
           {...form.getInputProps("email")}
-        />
-        <PasswordInput
-          label="Password"
-          placeholder="Your password"
-          mt="md"
-          name="password"
-          withAsterisk
-          {...form.getInputProps("password")}
-        />
-        <PasswordInput
-          label="Confirm Password"
-          placeholder="Confirm password"
-          mt="md"
-          name="confirm_password"
-          withAsterisk
-          {...form.getInputProps("confirm_password")}
+          disabled={isDisabled}
         />
         <Divider style={{ marginTop: "20px" }} size={1} />
-        <TextInput
-          label="Qualification"
-          placeholder="Qualification"
-          type="text"
-          mt="md"
-          name="qualification"
-          withAsterisk
-          {...form.getInputProps("qualification")}
-        />
-        <TextInput
-          label="Specialization"
-          placeholder="specialization"
-          type="text"
-          mt="md"
-          name="specialization"
-          withAsterisk
-          {...form.getInputProps("specialization")}
-        />
+        {loggedUserdata?.userType == "Doctor" ? (
+          <>
+            <TextInput
+              label="Qualification"
+              placeholder="Qualification"
+              type="text"
+              mt="md"
+              name="qualification"
+              withAsterisk
+              {...form.getInputProps("qualification")}
+              disabled={isDisabled}
+            />
+            <TextInput
+              label="Specialization"
+              placeholder="specialization"
+              type="text"
+              mt="md"
+              name="specialization"
+              withAsterisk
+              {...form.getInputProps("specialization")}
+              disabled={isDisabled}
+            />
+          </>
+        ) : null}
+
         <Divider style={{ marginTop: "20px" }} size={1} />
         <TextInput
           label="City"
@@ -247,6 +244,7 @@ const DoctorForm = () => {
           name="city"
           withAsterisk
           {...form.getInputProps("city")}
+          disabled={isDisabled}
         />
 
         <TextInput
@@ -258,6 +256,7 @@ const DoctorForm = () => {
           name="zipcode"
           maxLength={6}
           {...form.getInputProps("zipcode")}
+          disabled={isDisabled}
         />
 
         <Textarea
@@ -270,28 +269,34 @@ const DoctorForm = () => {
           onChange={(e) => {
             form.getInputProps("address").onChange(e);
           }}
-        />
-
-        <TextInput
-          label="Profile Picture"
-          placeholder="Profile Picture"
-          type="file"
-          mt="md"
-          name="Image"
-          withAsterisk
-          onChange={(e) => {
-            form.getInputProps("Image").onChange(e?.currentTarget?.files[0]);
-          }}
-          accept="image/png,image/jpeg"
+          disabled={isDisabled}
         />
 
         <Divider style={{ marginTop: "20px" }} size={1} />
-        <Button fullWidth mt="xl" type="submit">
-          Sign in
-        </Button>
+        <Group>
+          {" "}
+          <Button mt="xl" onClick={handleDisable} disabled={!isDisabled}>
+            Edit Profile
+          </Button>
+          {!isDisabled ? (
+            <>
+              <Button mt="xl" type="submit" variant="gradient" color="green">
+                Save Changes
+              </Button>
+              <Button
+                mt="xl"
+                variant="gradient"
+                gradient={{ from: "#ed6ea0", to: "#ec8c69", deg: 35 }}
+                onClick={() => setisDisabled(true)}
+              >
+                Discard Changes
+              </Button>
+            </>
+          ) : null}
+        </Group>
       </form>
     </>
   );
 };
 
-export default DoctorForm;
+export default EditUser;

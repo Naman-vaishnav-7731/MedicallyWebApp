@@ -38,7 +38,9 @@ import {
 
 export function Headbar() {
   const navigate = useNavigate();
-  const { adminLogged, setadminLogged } = useContext(UserContext);
+  const { adminLogged, setadminLogged, isLogged, setisLogged } =
+    useContext(UserContext);
+  const loggedUser = JSON.parse(localStorage.getItem("userData"));
 
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
@@ -66,6 +68,7 @@ export function Headbar() {
   const handleLogout = () => {
     localStorage.clear();
     setadminLogged(false);
+    setisLogged(false);
     navigate("/", { replace: true });
   };
 
@@ -87,21 +90,24 @@ export function Headbar() {
               <IconStethoscope size={23} />
               Our Doctors
             </a>
-            <a className={classes.link} onClick={() => navigate("chatroom")}>
-              <IconBrandMessenger size={23} />
-              Chat Room
-            </a>
+
+            {adminLogged || isLogged ? (
+              <a className={classes.link} onClick={() => navigate("chatroom")}>
+                <IconBrandMessenger size={23} />
+                Chat Room
+              </a>
+            ) : null}
           </Group>
 
           <Group className={classes.hiddenMobile}>
-            {adminLogged ? (
+            {adminLogged || isLogged ? (
               <>
                 <Menu shadow="md" width={200}>
                   <Menu.Target>
                     <Avatar
                       component="a"
                       target="_blank"
-                      src={namanImg}
+                      src={`/usersImage/${loggedUser?.Image}`}
                       alt="it's me"
                     />
                   </Menu.Target>
@@ -114,6 +120,13 @@ export function Headbar() {
                         onClick={() => navigate("/dashboard")}
                       >
                         Admin Dashboard
+                      </Menu.Item>
+                    ) : isLogged ? (
+                      <Menu.Item
+                        icon={<IconDashboard size={14} />}
+                        onClick={() => navigate("/profile")}
+                      >
+                        Profile
                       </Menu.Item>
                     ) : null}
                     <Menu.Item

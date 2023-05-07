@@ -16,8 +16,10 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const PatientForm = () => {
+  const navigate = useNavigate();
   //  Patient form inital values
   const form = useForm({
     initialValues: {
@@ -103,7 +105,6 @@ const PatientForm = () => {
         }
       );
       form.reset();
-      console.log(response);
     } catch (error) {
       console.log(error);
     }

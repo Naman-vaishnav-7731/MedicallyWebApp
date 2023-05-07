@@ -8,11 +8,12 @@ import { UserContext } from "./context/userContext";
 function App() {
   const loading = useRef(null);
   const location = useLocation();
-  const { adminLogged, setadminLogged } = useContext(UserContext);
+  const { setisLogged, setadminLogged } = useContext(UserContext);
 
   const handleAdmin = () => {
     const role = JSON.parse(localStorage.getItem("Role"));
     if (role == "Admin") setadminLogged(true);
+    if (role == "Doctor" || role == "Patient") setisLogged(true);
   };
 
   useEffect(() => {
