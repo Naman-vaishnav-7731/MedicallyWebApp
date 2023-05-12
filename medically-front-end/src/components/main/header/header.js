@@ -34,6 +34,8 @@ import {
   IconBrandMessenger,
   IconHome2,
   IconStethoscope,
+  IconHeartHandshake,
+  IconAddressBook
 } from "@tabler/icons-react";
 
 export function Headbar() {
@@ -89,6 +91,14 @@ export function Headbar() {
             <a className={classes.link} onClick={() => navigate("ourdoctors")}>
               <IconStethoscope size={23} />
               Our Doctors
+            </a>
+            <a className={classes.link} onClick={() => navigate("ourdoctors")}>
+              <IconHeartHandshake size={23} />
+              Our Mission
+            </a>
+            <a className={classes.link} onClick={() => navigate("ourdoctors")}>
+              <IconAddressBook size={23} />
+              Contact Us
             </a>
 
             {adminLogged || isLogged ? (
